@@ -187,6 +187,6 @@ reported separately.
 
 ### Disclosure Status
 
-- Reported to the vendor: not yet.
+- Reported to the vendor: yes.
 - CVE assigned: no (CVE-TBD).
 - Public disclosure: this directory only; no public advisory yet.
