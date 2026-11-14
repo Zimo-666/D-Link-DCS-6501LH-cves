@@ -10,29 +10,7 @@
 - Description:
 
 ```
-A heap-based buffer overflow (out-of-bounds write) vulnerability was
-discovered in D-Link DCS-6501LH camera firmware v3.03.02. The RTSP
-server of the aoni_ipc application allocates a fixed 276-byte request
-object in RTSPServerParseMessage and stores every parsed header as a
-pointer pair at v5[2*count+5] / v5[2*count+6] without bounding the
-header count, so a request carrying more than 31 headers writes past
-the end of the allocation. The 32nd header already writes 8 bytes past
-the 276-byte chunk, and every additional header extends the overflow
-by another 8 bytes (two heap pointers), up to the size that the RTSP
-receive path accepts. Parsing happens before any
-authentication check, and the service is reachable on TCP port 554
-without credentials. Reproduction: run the PoC script in this
-directory against port 554 of the target (an OPTIONS request with 32
-header lines); the server answers with a corrupted 200 OK whose first
-four bytes are a heap pointer instead of "RTSP/1.0", then the process
-aborts because of glibc heap corruption. Verified six out of six times
-in an emulated environment running the stock aoni_ipc binary, where the
-daemon died with SIGABRT right after the corrupted response was sent.
-Impact: unauthenticated remote denial of service (repeated crashes
-drive the watchdog to restart or reboot the device) and disclosure of
-heap pointer values together with corruption of adjacent heap objects,
-which can be developed further towards code execution. Proposed
-CVSS:3.1/AV:A/AC:L/PR:N/UI:N/S:U/C:L/I:N/A:H (7.1).
+A heap-based buffer overflow (out-of-bounds write) vulnerability was discovered in D-Link DCS-6501LH camera firmware v3.03.02. The RTSP server of the aoni_ipc application allocates a fixed 276-byte request object in RTSPServerParseMessage and stores every parsed header as a pointer pair at v5[2*count+5] / v5[2*count+6] without bounding the header count, so a request carrying more than 31 headers writes past the end of the allocation. The 32nd header already writes 8 bytes past the 276-byte chunk, and every additional header extends the overflow by another 8 bytes (two heap pointers), up to the size that the RTSP receive path accepts. Parsing happens before any authentication check, and the service is reachable on TCP port 554 without credentials. Reproduction: run the PoC script in this directory against port 554 of the target (an OPTIONS request with 32 header lines); the server answers with a corrupted 200 OK whose first four bytes are a heap pointer instead of "RTSP/1.0", then the process aborts because of glibc heap corruption. Verified six out of six times in an emulated environment running the stock aoni_ipc binary, where the daemon died with SIGABRT right after the corrupted response was sent. Impact: unauthenticated remote denial of service (repeated crashes drive the watchdog to restart or reboot the device) and disclosure of heap pointer values together with corruption of adjacent heap objects, which can be developed further towards code execution. Proposed CVSS:3.1/AV:A/AC:L/PR:N/UI:N/S:U/C:L/I:N/A:H (7.1).
 ```
 
 ---
