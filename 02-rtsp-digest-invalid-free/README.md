@@ -10,24 +10,7 @@
 - Description:
 
 ```
-An invalid free vulnerability was discovered in D-Link DCS-6501LH camera
-firmware v3.03.02. ValidateAuthorizationHeader in the aoni_ipc RTSP
-server parses the uri parameter of a Digest Authorization header; when
-the value does not contain "rtsp://", the code keeps a pointer into the
-request buffer instead of the heap object returned by ParseURI and later
-calls free() on it when the value does not match the session name. The
-crash happens while the credentials are parsed, so no valid credentials
-are needed. Reproduction: send the TEARDOWN request in poc.py to an
-existing RTSP session (the built-in echoshow session created at startup)
-with an Authorization header whose uri is "/x"; glibc reports
-"free(): invalid pointer" and the daemon aborts, while the same request
-with a uri of the form rtsp://host/live/echoshow/video returns a normal
-401 Unauthorized and leaves the service running. Verified two out of two
-times for each variant in an emulated environment running the stock
-aoni_ipc binary. Impact: unauthenticated remote denial of service; the
-supervisory process restarts the daemon, so repeated requests keep the
-RTSP and control service unavailable and can drive a device reboot.
-Proposed CVSS:3.1/AV:A/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H (6.5).
+An invalid free vulnerability was discovered in D-Link DCS-6501LH camera firmware v3.03.02. ValidateAuthorizationHeader in the aoni_ipc RTSP server parses the uri parameter of a Digest Authorization header; when the value does not contain "rtsp://", the code keeps a pointer into the request buffer instead of the heap object returned by ParseURI and later calls free() on it when the value does not match the session name. The crash happens while the credentials are parsed, so no valid credentials are needed. Reproduction: send the TEARDOWN request in poc.py to an existing RTSP session (the built-in echoshow session created at startup) with an Authorization header whose uri is "/x"; glibc reports "free(): invalid pointer" and the daemon aborts, while the same request with a uri of the form rtsp://host/live/echoshow/video returns a normal 401 Unauthorized and leaves the service running. Verified two out of two times for each variant in an emulated environment running the stock aoni_ipc binary. Impact: unauthenticated remote denial of service; the supervisory process restarts the daemon, so repeated requests keep the RTSP and control service unavailable and can drive a device reboot. Proposed CVSS:3.1/AV:A/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H (6.5).
 ```
 
 ---
