@@ -41,5 +41,5 @@ credential problems and unrelated to the memory-safety defects listed here.
 - The advisories are five distinct defects with independent root causes and
   fixes; the per-advisory "Related CVEs and Novelty" sections explain the
   separation.
-- Vendor notification: pending at publication time; coordinated disclosure
-  timeline will be updated here.
+- Vendor notified before publication; the coordinated disclosure timeline
+  will be updated here.
